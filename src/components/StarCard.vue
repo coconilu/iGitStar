@@ -6,7 +6,7 @@
         <div class="star-card-header-title">GoogleChrome/puppeteer</div>
         <div class="star-card-header-buttons">
           <slot>
-            <button><svg viewBox="0 0 1024 1024" version="1.1" p-id="2126" width="1.4em" height="1.4em"><path d="M927.4 273.5v-95.4h-87.9V82.8h-201v95.3h-87.9v95.4h-78.5v-95.4h-88V82.8H183.2v95.3H95.3v95.4H16.7v190.6h78.6v95.4h75.3v95.3H246v95.3h87.9v95.4h100.5v95.3h153.9v-95.3h100.4v-95.4h88v-95.3H852.1v-95.3h75.3v-95.4h78.5V273.5z" fill="#d81e06" p-id="2127"/></svg>collect</button>
+            <button><svg viewBox="0 0 1024 1024" width="14" height="14" version="1.1" p-id="2126" ><path d="M927.4 273.5v-95.4h-87.9V82.8h-201v95.3h-87.9v95.4h-78.5v-95.4h-88V82.8H183.2v95.3H95.3v95.4H16.7v190.6h78.6v95.4h75.3v95.3H246v95.3h87.9v95.4h100.5v95.3h153.9v-95.3h100.4v-95.4h88v-95.3H852.1v-95.3h75.3v-95.4h78.5V273.5z" fill="#fff" p-id="2127"/></svg><span>Collect</span></button>
           </slot>
         </div>
       </header>
@@ -45,7 +45,6 @@ export default {
 <style>
 section.star-card {
   width: 700px;
-  /* height: 100px; */
   margin: 25px 0;
   padding-left: 35px;
   position: relative;
@@ -69,27 +68,79 @@ section.star-card > article.star-card-main > img {
   box-shadow: 0 0 1px 2px rgba(0, 0, 0, 0.2);
 }
 section.star-card > article.star-card-main > header.star-card-header {
-  padding-top: 1em;
-  height: 1.5em;
+  box-sizing: border-box;
+  padding-top: 15px;
+  height: 45px;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: space-between;
+  align-items: stretch;
 }
 section.star-card
   > article.star-card-main
   > header.star-card-header
   > div.star-card-header-title {
-  font-size: 1.5em;
+  flex: 1 0 auto;
+  font-size: 30px;
+  line-height: 30px;
+  vertical-align: text-top;
   max-width: 70%;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  float: left;
+  letter-spacing: 0.1px;
 }
 section.star-card
   > article.star-card-main
   > header.star-card-header
   > div.star-card-header-buttons {
-  height: 1.5em;
-  float: right;
-  width: 30%;
+  flex: 0 0 auto;
+  height: 100%;
+  margin-right: 15px;
+  display: flex;
+  flex-direction: row-reverse;
+  flex-wrap: nowrap;
+  justify-content: flex-end;
+  align-items: stretch;
+}
+section.star-card
+  > article.star-card-main
+  > header.star-card-header
+  > div.star-card-header-buttons
+  > button {
+  border-radius: 32px;
+  border-style: none;
+  padding: 3px 15px;
+  color: #fff;
+  background-color: #2d8cf0;
+  border-color: #2d8cf0;
+  line-height: 1.2em;
+  vertical-align: middle;
+  transition: all 0.3s ease-in-out;
+}
+section.star-card
+  > article.star-card-main
+  > header.star-card-header
+  > div.star-card-header-buttons
+  > button:hover {
+  opacity: 0.8;
+}
+section.star-card
+  > article.star-card-main
+  > header.star-card-header
+  > div.star-card-header-buttons
+  > button:active {
+  opacity: 0.6;
+}
+section.star-card
+  > article.star-card-main
+  > header.star-card-header
+  > div.star-card-header-buttons
+  > button
+  > span {
+  padding-left: 10px;
+  letter-spacing: 1px;
 }
 section.star-card > article.star-card-main > p.star-card-description {
   font-size: 1.1em;
