@@ -244,7 +244,6 @@ section.star-card
   margin-right: 10px;
   color: #fff;
   background-color: #2d8cf0;
-  border-color: #2d8cf0;
   line-height: 30px;
   vertical-align: middle;
   transition: all 0.3s ease-in-out;
