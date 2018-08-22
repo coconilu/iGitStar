@@ -3,16 +3,18 @@
     <section class="skeleton-container"></section>
     <section class="starcard-container">
       <StarCard></StarCard>
+      <CollectCard></CollectCard>
     </section>
   </article>
 </template>
 
 <script>
 import StarCard from '@/components/StarCard'
+import CollectCard from '@/components/CollectCard'
 
 export default {
   name: 'HomePageMain',
-  components: { StarCard },
+  components: { StarCard, CollectCard },
   data: function () {
     return {
       isLoadedData: false
