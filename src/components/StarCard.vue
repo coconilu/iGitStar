@@ -244,7 +244,7 @@ section.star-card
   border-radius: 18px;
   border-style: none;
   color: #fff;
-  background-color: #2d8cf0;
+  background-color: #4D84B2;
   padding: 3px 15px;
   margin-right: 10px;
   line-height: 30px;
@@ -279,7 +279,7 @@ span.star-card-footer-language-icon {
   width: 11px;
   height: 11px;
   border-radius: 50%;
-  background-color: #177e89;
+  background-color: #3F485B;
   vertical-align: baseline;
   opacity: 0.6;
 }
