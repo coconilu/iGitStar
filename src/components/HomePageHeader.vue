@@ -2,14 +2,17 @@
     <header class="home-page-header">
         <article>
             <section></section>
-            <section></section>
+            <section><Avatar size=42 avaterImgUrl="https://avatars3.githubusercontent.com/u/8131019?v=4"></Avatar></section>
         </article>
     </header>
 </template>
 
 <script>
+import Avatar from '@/components/Avatar'
+
 export default {
-  name: 'HomePageHeader'
+  name: 'HomePageHeader',
+  components: { Avatar }
 }
 </script>
 
@@ -40,14 +43,16 @@ header.home-page-header > article {
 }
 header.home-page-header > article > section:first-of-type {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
+  flex-wrap: nowrap;
   justify-content: flex-start;
   align-items: center;
   height: 100%;
 }
 header.home-page-header > article > section:last-of-type {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
+  flex-wrap: nowrap;
   justify-content: flex-end;
   align-items: center;
   height: 100%;
