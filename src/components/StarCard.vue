@@ -181,7 +181,6 @@ export default {
 
 <style>
 section.star-card {
-  width: 750px;
   margin: 25px 0;
   padding-left: 35px;
   position: relative;
