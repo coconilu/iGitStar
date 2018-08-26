@@ -2,10 +2,14 @@
   <article class="home-page-main">
     <section class="skeleton-container"></section>
     <section class="collection-container">
-      <CollectCard v-for="(collect, index) of collectionsFromServer" :key="collect.full_name" :metaData="collect" :index="index" @toTheTop="repositoryToTop" @removeFromCollections="removeFromCollections"></CollectCard>
+      <CollectedCardContainer>
+        <CollectCard v-for="(collect, index) of collectionsFromServer" :key="collect.full_name" :metaData="collect" :index="index" @toTheTop="repositoryToTop" @removeFromCollections="removeFromCollections"></CollectCard>
+      </CollectedCardContainer>
     </section>
     <section class="starcard-container">
-      <StarCard v-for="(star, index) of filterToShowStars" :key="star.full_name" :metaData="star" :index="index" @addToCollections="addToCollections"></StarCard>
+      <StarCardContainer>
+        <StarCard v-for="(star, index) of starsFromServer" v-show="!star.hasCollected" :key="star.full_name" :metaData="star" :index="index" @addToCollections="addToCollections"></StarCard>
+      </StarCardContainer>
     </section>
     <section class="indication">
       <span v-if="hasLoadedAllStars">—— · No More · ——</span>
@@ -16,7 +20,8 @@
 <script>
 import StarCard from '@/components/StarCard'
 import CollectCard from '@/components/CollectCard'
-
+import StarCardContainer from '@/components/StarCardContainer'
+import CollectedCardContainer from '@/components/CollectedCardContainer'
 export default {
   name: 'HomePageMain',
   props: {
@@ -25,7 +30,12 @@ export default {
       default: ''
     }
   },
-  components: { StarCard, CollectCard },
+  components: {
+    StarCard,
+    CollectCard,
+    StarCardContainer,
+    CollectedCardContainer
+  },
   data: function () {
     return {
       hasLoadedAllStars: false,
@@ -39,8 +49,8 @@ export default {
     gainCollectionsFromLocal: function () {
       this.collectionsFromLocal = JSON.parse(window.localStorage.getItem('myCollections')) || []
     },
-    saveCollections: function (value) {
-      window.localStorage.setItem('myCollections', JSON.stringify(value))
+    saveCollections: function () {
+      window.localStorage.setItem('myCollections', JSON.stringify(this.collectionsFromLocal) || [])
     },
     emptyCollections: function () {
       window.localStorage.setItem('myCollections', JSON.stringify([]))
@@ -57,7 +67,9 @@ export default {
     getCollectionsFromServer: function (arr, onSuccess, onFailure) {
       var resultPromise = arr.map((item, index) => {
         return this.$axios.get(`https://api.github.com/repos/${item}`, {
-          'headers': { 'Accept': 'application/vnd.github.v3+json' }
+          'headers': {
+            'Accept': 'application/vnd.github.v3+json'
+          }
         })
       })
       Promise.all(resultPromise).then(result => {
@@ -70,8 +82,12 @@ export default {
     },
     getStarsFromServer: function (userName, page, onSuccess, onFailure) {
       this.$axios.get(`https://api.github.com/users/${userName}/starred`, {
-        'headers': { 'Accept': 'application/vnd.github.v3+json' },
-        'params': { 'page': page }
+        'headers': {
+          'Accept': 'application/vnd.github.v3+json'
+        },
+        'params': {
+          'page': page
+        }
       }).then(response => {
         if (response.status === 200) {
           onSuccess && onSuccess(response.data)
@@ -82,7 +98,9 @@ export default {
     },
     getRepositoryFromServer: function (repoName, onSuccess, onFailure) {
       this.$axios.get(`https://api.github.com/repos/${repoName}`, {
-        'headers': { 'Accept': 'application/vnd.github.v3+json' }
+        'headers': {
+          'Accept': 'application/vnd.github.v3+json'
+        }
       }).then(response => {
         onSuccess && onSuccess(response.data)
       }).catch(reason => {
@@ -90,37 +108,55 @@ export default {
       })
     },
     addToCollections: function (index) {
-      this.starsFromServer[index].hasCollected = true
-      this.collectionsFromLocal.unshift(this.starsFromServer[index].full_name)
-      this.collectionsFromServer.unshift(this.starsFromServer[index])
-      setTimeout(this.saveCollections)
+      if (!this.starsFromServer[index].hasCollected) {
+        this.$set(this.starsFromServer[index], 'hasCollected', true)
+        this.collectionsFromLocal.unshift(this.starsFromServer[index].full_name)
+        this.collectionsFromServer.unshift(this.starsFromServer[index])
+        setTimeout(this.saveCollections)
+      }
     },
     repositoryToTop: function (index) {
-      Array.prototype.unshift.apply(this.collectionsFromLocal, this.collectionsFromLocal.splice(index, 1))
-      Array.prototype.unshift.apply(this.collectionsFromServer, this.collectionsFromServer.splice(index, 1))
-      setTimeout(this.saveCollections)
+      if (index !== 0) {
+        this.collectionsFromLocal.unshift.apply(this.collectionsFromLocal, this.collectionsFromLocal.splice(index, 1))
+        this.collectionsFromServer.unshift.apply(this.collectionsFromServer, this.collectionsFromServer.splice(index, 1))
+        setTimeout(this.saveCollections)
+      }
     },
     removeFromCollections: function (index) {
+      var targetFullName = this.collectionsFromLocal[index]
       this.collectionsFromLocal.splice(index, 1)
       this.collectionsFromServer.splice(index, 1)
-      this.starsFromServer[index].hasCollected = false
+      setTimeout(() => {
+        this.starsFromServer.length && this.starsFromServer.forEach(item => {
+          if (item.full_name === targetFullName) this.$set(item, 'hasCollected', false)
+        })
+      })
       setTimeout(this.saveCollections)
     },
     smoothInsertItem: function (step, targetArr, sourceArr) {
       var end = 0
-      window.requestAnimationFrame(function insertItem () {
+      var insertItem = function () {
         targetArr.push.apply(targetArr, sourceArr.slice(end, end + step))
         end += step
         if (end < sourceArr.length) {
           window.requestAnimationFrame(insertItem)
         }
-      })
+      }
+      window.requestAnimationFrame(insertItem)
     },
     loadMoreStars: function () {
       if (!this.hasLoadedAllStars) {
         this.getStarsFromServer(this.userName, this.page++, result => {
-          if (result.length < 30) this.hasLoadedAllStars = true
-          this.smoothInsertItem(10, this.starsFromServer, result)
+          if (result.length >= 0) {
+            if (result.length < 30) this.hasLoadedAllStars = true
+            this.collectionsFromLocal.length && result.forEach(item => {
+              if (this.collectionsFromLocal.includes(item.full_name)) item.hasCollected = true
+            })
+            this.smoothInsertItem(10, this.starsFromServer, result)
+          } else {
+            // TODO: to show username unfounded
+            this.hasLoadedAllStars = true
+          }
         })
       }
     }
@@ -136,23 +172,17 @@ export default {
       handler: function (newValue) {
         if (newValue.length) {
           // login
+          this.hasLoadedAllStars = false
+          this.page = 1
           this.gainCollectionsFromLocal()
           if (this.collectionsFromLocal && this.collectionsFromLocal.length > 0) {
             this.getCollectionsFromServer(this.collectionsFromLocal, result => {
               this.smoothInsertItem(10, this.collectionsFromServer, result)
+              this.loadMoreStars()
             })
+          } else {
+            this.loadMoreStars()
           }
-          this.page = 1
-          this.getStarsFromServer(newValue, this.page++, result => {
-            if (result.length >= 0) {
-              // use api requestAnimationFrame
-              this.smoothInsertItem(10, this.starsFromServer, result)
-              if (result.length < 30) this.hasLoadedAllStars = true
-            } else {
-              // TODO: to show username unfounded
-              this.hasLoadedAllStars = true
-            }
-          })
           setTimeout(this.saveUserName)
         } else {
           // logout
@@ -164,13 +194,6 @@ export default {
         }
       },
       immediate: true
-    }
-  },
-  computed: {
-    filterToShowStars: function () {
-      return this.starsFromServer.filter(item => {
-        return !item.hasCollected
-      })
     }
   }
 }
