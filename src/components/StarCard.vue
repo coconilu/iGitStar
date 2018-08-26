@@ -1,5 +1,5 @@
 <template>
-  <section class="star-card animated bounceInRight">
+  <section class="star-card animated">
     <article class="star-card-main">
       <img :src="img_url" alt="logo">
       <header class="star-card-header">
