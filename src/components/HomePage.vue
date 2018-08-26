@@ -2,7 +2,7 @@
 <div class="home-page">
   <HomePageHeader></HomePageHeader>
   <article class="home-page-main-container">
-    <HomePageBody></HomePageBody>
+    <HomePageBody userName="coconilu"></HomePageBody>
     <HomePageFooter></HomePageFooter>
   </article>
 </div>
@@ -26,9 +26,9 @@ div.home-page {
 }
 div.home-page > *:first-child {
   height: 60px;
+  z-index: 100;
 }
 article.home-page-main-container {
-  height: 100%;
   display: flex;
   flex-direction: column;
   flex-wrap: nowrap;
