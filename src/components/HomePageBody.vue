@@ -159,6 +159,18 @@ export default {
           }
         })
       }
+    },
+    onVisible: function (selector, callback) {
+      var shouldRun = true
+      window.addEventListener('scroll', function () {
+        if (shouldRun) {
+          shouldRun = false
+          // TODO when onVisible
+          setTimeout(() => {
+            shouldRun = true
+          }, 200)
+        }
+      })
     }
   },
   created: function () {
