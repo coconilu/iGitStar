@@ -144,7 +144,7 @@ export default {
       }
       window.requestAnimationFrame(insertItem)
     },
-    loadMoreStars: function () {
+    loadMoreStars: function (callback) {
       if (!this.hasLoadedAllStars) {
         this.getStarsFromServer(this.userName, this.page++, result => {
           if (result.length >= 0) {
@@ -157,6 +157,7 @@ export default {
             // TODO: to show username unfounded
             this.hasLoadedAllStars = true
           }
+          callback && callback()
         })
       }
     },
@@ -166,18 +167,15 @@ export default {
         if (shouldRun) {
           shouldRun = false
           // TODO when onVisible
+          if (selector.getBoundingClientRect().top < window.innerHeight) {
+            callback && callback()
+          }
           setTimeout(() => {
             shouldRun = true
           }, 200)
         }
       })
     }
-  },
-  created: function () {
-    // this.gainUserName()
-    window.addEventListener('scroll', function () {
-      // auto load more stars
-    })
   },
   watch: {
     userName: {
@@ -190,10 +188,14 @@ export default {
           if (this.collectionsFromLocal && this.collectionsFromLocal.length > 0) {
             this.getCollectionsFromServer(this.collectionsFromLocal, result => {
               this.smoothInsertItem(10, this.collectionsFromServer, result)
-              this.loadMoreStars()
+              this.loadMoreStars(() => {
+                this.onVisible(document.querySelector('section.indication'), () => { this.loadMoreStars() })
+              })
             })
           } else {
-            this.loadMoreStars()
+            this.loadMoreStars(() => {
+              this.onVisible(document.querySelector('section.indication'), () => { this.loadMoreStars() })
+            })
           }
           setTimeout(this.saveUserName)
         } else {
