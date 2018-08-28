@@ -55,9 +55,6 @@ export default {
     emptyCollections: function () {
       window.localStorage.setItem('myCollections', JSON.stringify([]))
     },
-    gainUserName: function () {
-      this.userName = window.localStorage.getItem('userName') || ''
-    },
     saveUserName: function () {
       window.localStorage.setItem('userName', this.userName)
     },
@@ -239,7 +236,7 @@ section.starcard-container {
   position: relative;
 }
 section.indication {
-  line-height: 100%;
+  line-height: 200%;
   font-size: 0.8em;
   opacity: 0.5;
 }
