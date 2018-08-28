@@ -1,8 +1,8 @@
 <template>
 <div class="home-page">
-  <HomePageHeader></HomePageHeader>
+  <HomePageHeader @login="login"></HomePageHeader>
   <article class="home-page-main-container">
-    <HomePageBody userName="coconilu"></HomePageBody>
+    <HomePageBody :userName="userName"></HomePageBody>
     <HomePageFooter></HomePageFooter>
   </article>
 </div>
@@ -15,7 +15,27 @@ import HomePageFooter from '@/components/HomePageFooter'
 
 export default {
   name: 'HomePage',
-  components: { HomePageHeader, HomePageBody, HomePageFooter }
+  data: function () {
+    return {
+      userName: ''
+    }
+  },
+  components: { HomePageHeader, HomePageBody, HomePageFooter },
+  methods: {
+    gainUserName: function () {
+      this.userName = window.localStorage.getItem('userName') || ''
+    },
+    saveUserName: function () {
+      window.localStorage.setItem('userName', this.userName)
+    },
+    login: function (userName) {
+      this.userName = userName
+      setTimeout(this.saveUserName)
+    }
+  },
+  created: function () {
+    this.gainUserName()
+  }
 }
 </script>
 
