@@ -22,6 +22,6 @@ new Vue({
   },
   template: '<App/>',
   created: function () {
-    // this.getStars()
+    this.$store.commit('initData')
   }
 })

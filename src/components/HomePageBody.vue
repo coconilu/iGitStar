@@ -39,28 +39,28 @@ export default {
   data: function () {
     return {
       hasLoadedAllStars: false,
-      collectionsFromLocal: [],
+      collectionsFromLocal: this.$store.state.collections,
       collectionsFromServer: [],
       starsFromServer: [],
       page: 1
     }
   },
   methods: {
-    gainCollectionsFromLocal: function () {
-      this.collectionsFromLocal = JSON.parse(window.localStorage.getItem('myCollections')) || []
-    },
-    saveCollections: function () {
-      window.localStorage.setItem('myCollections', JSON.stringify(this.collectionsFromLocal) || [])
-    },
-    emptyCollections: function () {
-      window.localStorage.setItem('myCollections', JSON.stringify([]))
-    },
-    saveUserName: function () {
-      window.localStorage.setItem('userName', this.userName)
-    },
-    emptyUserName: function () {
-      window.localStorage.setItem('userName', '')
-    },
+    // gainCollectionsFromLocal: function () {
+    //   this.collectionsFromLocal = JSON.parse(window.localStorage.getItem('myCollections')) || []
+    // },
+    // saveCollections: function () {
+    //   window.localStorage.setItem('myCollections', JSON.stringify(this.collectionsFromLocal) || [])
+    // },
+    // emptyCollections: function () {
+    //   window.localStorage.setItem('myCollections', JSON.stringify([]))
+    // },
+    // saveUserName: function () {
+    //   window.localStorage.setItem('userName', this.userName)
+    // },
+    // emptyUserName: function () {
+    //   window.localStorage.setItem('userName', '')
+    // },
     getCollectionsFromServer: function (arr, onSuccess, onFailure) {
       var resultPromise = arr.map((item, index) => {
         return this.$axios.get(`https://api.github.com/repos/${item}`, {
@@ -107,28 +107,40 @@ export default {
     addToCollections: function (index) {
       if (!this.starsFromServer[index].hasCollected) {
         this.$set(this.starsFromServer[index], 'hasCollected', true)
-        this.collectionsFromLocal.unshift(this.starsFromServer[index].full_name)
+        // this.collectionsFromLocal.unshift(this.starsFromServer[index].full_name)
         this.collectionsFromServer.unshift(this.starsFromServer[index])
-        setTimeout(this.saveCollections)
+        // setTimeout(this.saveCollections)
+        this.$store.dispatch('persistCollections', {
+          type: 'add',
+          newItem: this.starsFromServer[index].full_name
+        })
       }
     },
     repositoryToTop: function (index) {
       if (index !== 0) {
-        this.collectionsFromLocal.unshift.apply(this.collectionsFromLocal, this.collectionsFromLocal.splice(index, 1))
+        // this.collectionsFromLocal.unshift.apply(this.collectionsFromLocal, this.collectionsFromLocal.splice(index, 1))
         this.collectionsFromServer.unshift.apply(this.collectionsFromServer, this.collectionsFromServer.splice(index, 1))
-        setTimeout(this.saveCollections)
+        // setTimeout(this.saveCollections)
+        this.$store.dispatch('persistCollections', {
+          type: 'toTop',
+          toTopIndex: index
+        })
       }
     },
     removeFromCollections: function (index) {
       var targetFullName = this.collectionsFromLocal[index]
-      this.collectionsFromLocal.splice(index, 1)
+      // this.collectionsFromLocal.splice(index, 1)
       this.collectionsFromServer.splice(index, 1)
+      // setTimeout(this.saveCollections)
+      this.$store.dispatch('persistCollections', {
+        type: 'remove',
+        removeIndex: index
+      })
       setTimeout(() => {
         this.starsFromServer.length && this.starsFromServer.forEach(item => {
           if (item.full_name === targetFullName) this.$set(item, 'hasCollected', false)
         })
       })
-      setTimeout(this.saveCollections)
     },
     smoothInsertItem: function (step, targetArr, sourceArr) {
       var end = 0
@@ -181,7 +193,7 @@ export default {
           // login
           this.hasLoadedAllStars = false
           this.page = 1
-          this.gainCollectionsFromLocal()
+          // this.gainCollectionsFromLocal()
           if (this.collectionsFromLocal && this.collectionsFromLocal.length > 0) {
             this.getCollectionsFromServer(this.collectionsFromLocal, result => {
               this.smoothInsertItem(10, this.collectionsFromServer, result)
@@ -194,14 +206,15 @@ export default {
               this.onVisible(document.querySelector('section.indication'), () => { this.loadMoreStars() })
             })
           }
-          setTimeout(this.saveUserName)
+          // setTimeout(this.saveUserName)
         } else {
           // logout
           this.starsFromServer = []
           this.collectionsFromServer = []
-          this.collectionsFromLocal = []
-          setTimeout(this.emptyCollections)
-          setTimeout(this.emptyUserName)
+          // this.collectionsFromLocal = []
+          // setTimeout(this.emptyCollections)
+          // setTimeout(this.emptyUserName)
+          this.$store.dispatch('logout')
         }
       },
       immediate: true
