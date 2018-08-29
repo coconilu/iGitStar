@@ -3,10 +3,10 @@
     <article>
       <section></section>
       <section>
-        <Avatar  :size="42" avaterImgUrl="https://avatars3.githubusercontent.com/u/8131019?v=4"></Avatar>
-        <div class="login-form">
-          <input type="text" placeholder="Your Github Login Name" /><button type="submit">Login</button>
-        </div>
+        <transition name="login-widget" enter-active-class="bounceInDown" leave-active-class="bounceOutUp" mode="out-in">
+          <Avatar v-if="hasLogined" :size="42"></Avatar>
+          <LoginForm v-else></LoginForm>
+        </transition>
       </section>
     </article>
   </header>
@@ -14,19 +14,16 @@
 
 <script>
 import Avatar from '@/components/Avatar'
+import LoginForm from '@/components/LoginForm'
 
 export default {
   name: 'HomePageHeader',
-  props: {
-    type: String,
-    default: ''
-  },
-  data: function () {
-    return {
-      hasLogined: false
+  components: { Avatar, LoginForm },
+  computed: {
+    hasLogined: function () {
+      return !!this.$store.state.userName.length
     }
-  },
-  components: { Avatar }
+  }
 }
 </script>
 
@@ -70,29 +67,8 @@ header.home-page-header > article > section:last-of-type {
   align-items: center;
   height: 100%;
 }
-div.login-form > * {
-  line-height: 1.8em;
-  font-size: 1em;
-  outline: none;
-  border: solid 1px #4d84b2;
-}
-div.login-form > input {
-  padding: 0 10px;
-  border-radius: 10px 0 0 10px;
-}
-div.login-form > input:focus {
-  box-shadow: 0 0 6px rgba(0, 0, 0, 0.2);
-}
-div.login-form > button {
-  padding: 0 6px;
-  border-radius: 0 10px 10px 0;
-  background-color: #4d84b2;
-  color: white;
-}
-div.login-form > button:hover {
-  opacity: 0.8;
-}
-div.login-form > button:active {
-  opacity: 0.6;
+header.home-page-header > article > section:last-of-type > * {
+  animation-duration: 1s;
+  animation-fill-mode: both;
 }
 </style>

@@ -21,7 +21,6 @@ export default {
   },
   computed: {
     avatarImgUrl: function () {
-      console.log(this.$store)
       return this.$store.state.avatarURL
     }
   }
