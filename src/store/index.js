@@ -6,12 +6,18 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   state: {
     userName: '',
-    collections: [],
-    stars: []
+    avatarURL: '',
+    userInformations: {}
   },
   mutations: {
-    setUserName (userName) {
-      this.state.userName = userName
+    setUserName: function (state, payload) {
+      state.userName = payload.userName
+    },
+    setAvatarURL: function (state, payload) {
+      state.avatarURL = payload.avatarURL
+    },
+    setUserInformations: function (state, payload) {
+      state.userInformations = { ...payload }
     }
   }
 })
