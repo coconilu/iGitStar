@@ -1,5 +1,5 @@
 <template>
-  <transition-group name="card-container" class="card-container" tag="div" enter-active-class="bounceInRight" leave-active-class="bounceOutDown" move-class="when-move">
+  <transition-group name="card-container" class="card-container" tag="div" enter-active-class="slideInRight" leave-active-class="slideOutDown" move-class="when-move">
     <slot></slot>
   </transition-group>
 </template>
