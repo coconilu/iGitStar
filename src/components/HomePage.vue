@@ -29,6 +29,7 @@ div.home-page > *:first-child {
   z-index: 100;
 }
 article.home-page-main-container {
+  min-height: 100%;
   display: flex;
   flex-direction: column;
   flex-wrap: nowrap;
