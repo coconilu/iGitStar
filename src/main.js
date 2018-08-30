@@ -23,5 +23,6 @@ new Vue({
   template: '<App/>',
   created: function () {
     this.$store.commit('initData')
+    this.$store.dispatch('login')
   }
 })

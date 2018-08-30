@@ -1,9 +1,10 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+import axios from 'axios'
 
 Vue.use(Vuex)
 
-export default new Vuex.Store({
+var store = new Vuex.Store({
   state: {
     hasLogin: false,
     userName: 'coconilu',
@@ -52,8 +53,9 @@ export default new Vuex.Store({
   },
   actions: {
     login: function ({ commit, state }, payload) {
-      if (payload.userName.length) {
-        this.$axios.get(`https://api.github.com/users/${payload.userName}`, {
+      var _userName = !payload ? state.userName : payload.userName
+      if (_userName.length) {
+        this.$axios.get(`https://api.github.com/users/${_userName}`, {
           'headers': {
             'Accept': 'application/vnd.github.v3+json'
           }
@@ -90,3 +92,7 @@ export default new Vuex.Store({
     }
   }
 })
+
+store.$axios = axios
+
+export default store
