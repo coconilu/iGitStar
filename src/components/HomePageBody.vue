@@ -1,6 +1,8 @@
 <template>
   <article class="home-page-main">
-    <section class="skeleton-container"></section>
+    <section class="skeleton-container">
+      <Skeleton></Skeleton>
+    </section>
     <section class="collection-container">
       <CollectedCardContainer>
         <CollectCard v-for="(collect, index) of collectionsFromServer" :key="collect.full_name" :metaData="collect" :index="index" @toTheTop="repositoryToTop" @removeFromCollections="removeFromCollections"></CollectCard>
@@ -18,6 +20,7 @@
 </template>
 
 <script>
+import Skeleton from '@/components/Skeleton'
 import StarCard from '@/components/StarCard'
 import CollectCard from '@/components/CollectCard'
 import StarCardContainer from '@/components/StarCardContainer'
@@ -25,6 +28,7 @@ import CollectedCardContainer from '@/components/CollectedCardContainer'
 export default {
   name: 'HomePageMain',
   components: {
+    Skeleton,
     StarCard,
     CollectCard,
     StarCardContainer,
@@ -206,13 +210,7 @@ article.home-page-main {
   position: relative;
 }
 section.skeleton-container {
-  display: none;
-  position: absolute;
-  top: 70;
-  left: 0;
-  width: 100%;
-  min-height: 300px;
-  background-color: #a7e8bd;
+  position: relative;
 }
 section.collection-container {
   position: relative;
