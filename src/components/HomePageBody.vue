@@ -39,10 +39,43 @@ export default {
   data: function () {
     return {
       hasLoadedAllStars: false,
-      collectionsFromLocal: this.$store.state.collections,
       collectionsFromServer: [],
       starsFromServer: [],
       page: 1
+    }
+  },
+  computed: {
+    collectionsFromLocal: function () {
+      return this.$store.state.collections
+    }
+  },
+  watch: {
+    userName: {
+      handler: function (newValue) {
+        if (newValue.length) {
+          // login
+          this.hasLoadedAllStars = false
+          this.page = 1
+          if (this.collectionsFromLocal && this.collectionsFromLocal.length > 0) {
+            this.getCollectionsFromServer(this.collectionsFromLocal, result => {
+              this.smoothInsertItem(10, this.collectionsFromServer, result)
+              this.loadMoreStars(() => {
+                this.onVisible(document.querySelector('section.indication'), () => { this.loadMoreStars() })
+              })
+            })
+          } else {
+            this.loadMoreStars(() => {
+              this.onVisible(document.querySelector('section.indication'), () => { this.loadMoreStars() })
+            })
+          }
+        } else {
+          // logout
+          this.starsFromServer = []
+          this.collectionsFromServer = []
+          this.$store.dispatch('logout')
+        }
+      },
+      immediate: true
     }
   },
   methods: {
@@ -163,35 +196,6 @@ export default {
           }, 200)
         }
       })
-    }
-  },
-  watch: {
-    userName: {
-      handler: function (newValue) {
-        if (newValue.length) {
-          // login
-          this.hasLoadedAllStars = false
-          this.page = 1
-          if (this.collectionsFromLocal && this.collectionsFromLocal.length > 0) {
-            this.getCollectionsFromServer(this.collectionsFromLocal, result => {
-              this.smoothInsertItem(10, this.collectionsFromServer, result)
-              this.loadMoreStars(() => {
-                this.onVisible(document.querySelector('section.indication'), () => { this.loadMoreStars() })
-              })
-            })
-          } else {
-            this.loadMoreStars(() => {
-              this.onVisible(document.querySelector('section.indication'), () => { this.loadMoreStars() })
-            })
-          }
-        } else {
-          // logout
-          this.starsFromServer = []
-          this.collectionsFromServer = []
-          this.$store.dispatch('logout')
-        }
-      },
-      immediate: true
     }
   }
 }
