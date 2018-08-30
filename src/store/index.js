@@ -5,12 +5,16 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
+    hasLogin: false,
     userName: 'coconilu',
     avatarURL: 'https://avatars3.githubusercontent.com/u/8131019?v=4',
     collections: [],
     userInformations: {}
   },
   mutations: {
+    updateLoginState: function (state, payload) {
+      state.hasLogin = payload.hasLogin
+    },
     updateUserName: function (state, payload) {
       state.userName = payload.userName
     },
@@ -46,18 +50,13 @@ export default new Vuex.Store({
     }
   },
   actions: {
-    persistUserInformation: function ({ commit, state }, payload) {
+    login: function ({ commit, state }, payload) {
       payload.userName && commit('updateUserName', payload)
       payload.avatarURL && commit('updateAvatarURL', payload)
+      commit('updateLoginState', { hasLogin: true })
       setTimeout(() => {
         window.localStorage.setItem('userName', state.userName)
         window.localStorage.setItem('avatarURL', state.avatarURL)
-      })
-    },
-    persistCollections: function ({ commit, state }, payload) {
-      commit('updateCollections', payload)
-      setTimeout(() => {
-        window.localStorage.setItem('collections', JSON.stringify(state.collections || []))
       })
     },
     logout: function ({ commit, state }) {
@@ -65,6 +64,12 @@ export default new Vuex.Store({
       setTimeout(() => {
         window.localStorage.setItem('userName', state.userName)
         window.localStorage.setItem('avatarURL', state.avatarURL)
+        window.localStorage.setItem('collections', JSON.stringify(state.collections || []))
+      })
+    },
+    persistCollections: function ({ commit, state }, payload) {
+      commit('updateCollections', payload)
+      setTimeout(() => {
         window.localStorage.setItem('collections', JSON.stringify(state.collections || []))
       })
     }
