@@ -24,12 +24,6 @@ import StarCardContainer from '@/components/StarCardContainer'
 import CollectedCardContainer from '@/components/CollectedCardContainer'
 export default {
   name: 'HomePageMain',
-  props: {
-    userName: {
-      type: String,
-      default: ''
-    }
-  },
   components: {
     StarCard,
     CollectCard,
@@ -45,6 +39,9 @@ export default {
     }
   },
   computed: {
+    userName: function () {
+      return this.$store.state.userName
+    },
     collectionsFromLocal: function () {
       return this.$store.state.collections
     }
