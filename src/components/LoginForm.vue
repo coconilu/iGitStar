@@ -1,12 +1,42 @@
 <template>
   <div class="login-form">
-    <input type="text" placeholder="Your Github Login Name" /><button type="submit">Login</button>
+    <input type="text" placeholder="Your Github Login Name" v-model="userName" @keyup.enter="login"/><button type="submit" @click="login">Login</button>
   </div>
 </template>
 
 <script>
 export default {
-  name: 'LoginForm'
+  name: 'LoginForm',
+  data: function () {
+    return {
+      userName: ''
+    }
+  },
+  methods: {
+    login: function () {
+      this.userName = this.userName.replace(/(^\s*)|(\s*$)/g, '')
+      console.log(this.userName)
+      if (this.userName.length) {
+        this.$axios.get(`https://api.github.com/users/${this.userName}`, {
+          'headers': {
+            'Accept': 'application/vnd.github.v3+json'
+          }
+        }).then(response => {
+          console.log(response)
+          if (response.status === 200) {
+            this.$store.dispatch('login', {
+              userName: response.data.login,
+              avatarURL: response.data.avatar_url
+            })
+            this.$store.commit('updateUserInformations', response.data)
+          }
+        }).catch(reason => {
+          console.log('login fail!')
+          this.$store.commit('updateLoginState', { hasLogin: false })
+        })
+      }
+    }
+  }
 }
 </script>
 
