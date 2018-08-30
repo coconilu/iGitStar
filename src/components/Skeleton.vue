@@ -40,6 +40,7 @@ div.skeleton {
   border-color: #eee;
   margin: 25px 0;
   padding-left: 35px;
+  position: relative;
 }
 div.skeleton-image {
   position: absolute;
