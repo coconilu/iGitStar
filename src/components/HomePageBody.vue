@@ -1,20 +1,27 @@
 <template>
   <article class="home-page-main">
-    <section class="skeleton-container">
-      <Skeleton></Skeleton>
-    </section>
-    <section class="collection-container">
-      <CollectedCardContainer>
-        <CollectCard v-for="(collect, index) of collectionsFromServer" :key="collect.full_name" :metaData="collect" :index="index" @toTheTop="repositoryToTop" @removeFromCollections="removeFromCollections"></CollectCard>
-      </CollectedCardContainer>
-    </section>
-    <section class="starcard-container">
-      <StarCardContainer>
-        <StarCard v-for="(star, index) of starsFromServer" v-show="!star.hasCollected" :key="star.full_name" :metaData="star" :index="index" @addToCollections="addToCollections"></StarCard>
-      </StarCardContainer>
-    </section>
+    <transition name="home-page-switcher">
+      <section class="skeleton-container" v-if="shouldShowSkeleton" mode="out-in">
+        <Skeleton v-for="item of [1,2]" :key="item"></Skeleton>
+      </section>
+      <div class="cards-container" v-else>
+        <section class="collection-container">
+          <CollectedCardContainer>
+            <CollectCard v-for="(collect, index) of collectionsFromServer" :key="collect.full_name" :metaData="collect" :index="index" @toTheTop="repositoryToTop" @removeFromCollections="removeFromCollections"></CollectCard>
+          </CollectedCardContainer>
+        </section>
+        <section class="starcard-container">
+          <StarCardContainer>
+            <StarCard v-for="(star, index) of starsFromServer" v-show="!star.hasCollected" :key="star.full_name" :metaData="star" :index="index" @addToCollections="addToCollections"></StarCard>
+          </StarCardContainer>
+        </section>
+      </div>
+    </transition>
     <section class="indication">
-      <span v-if="hasLoadedAllStars">—— · No More · ——</span>
+      <transition name="indication-switcher" mode="out-in">
+        <Skeleton v-if="!hasLoadedAllStars"></Skeleton>
+        <span v-else>—— · No More · ——</span>
+      </transition>
     </section>
   </article>
 </template>
@@ -48,6 +55,11 @@ export default {
     },
     collectionsFromLocal: function () {
       return this.$store.state.collections
+    },
+    shouldShowSkeleton: function () {
+      console.log('hi')
+      console.log(this.collectionsFromServer, this.starsFromServer)
+      return !(this.collectionsFromServer.length || this.starsFromServer.length)
     }
   },
   watch: {
@@ -61,12 +73,16 @@ export default {
             this.getCollectionsFromServer(this.collectionsFromLocal, result => {
               this.smoothInsertItem(10, this.collectionsFromServer, result)
               this.loadMoreStars(() => {
-                this.onVisible(document.querySelector('section.indication'), () => { this.loadMoreStars() })
+                this.onVisible(document.querySelector('section.indication'), () => {
+                  this.loadMoreStars()
+                })
               })
             })
           } else {
             this.loadMoreStars(() => {
-              this.onVisible(document.querySelector('section.indication'), () => { this.loadMoreStars() })
+              this.onVisible(document.querySelector('section.indication'), () => {
+                this.loadMoreStars()
+              })
             })
           }
         } else {
@@ -209,13 +225,18 @@ article.home-page-main {
   box-sizing: border-box;
   position: relative;
 }
+.home-page-switcher-enter-active {
+  opacity: 1;
+  transition: all 0.5s linear;
+}
+.home-page-switcher-leave-active {
+  opacity: 0;
+  transition: all 0.5s linear;
+}
 section.skeleton-container {
   position: relative;
 }
 section.collection-container {
-  position: relative;
-}
-section.division {
   position: relative;
 }
 section.starcard-container {
@@ -224,10 +245,20 @@ section.starcard-container {
 section.indication {
   line-height: 200%;
   font-size: 0.8em;
-  opacity: 0.5;
 }
 section.indication > span {
   vertical-align: middle;
   font-size: 0.8em;
+  opacity: 0.5;
+}
+.indication-switcher-enter-active {
+  animation-duration: 0.5s;
+  animation-fill-mode: both;
+  animation-name: flipInY;
+}
+.indication-switcher-leave-active {
+  animation-duration: 0.5s;
+  animation-fill-mode: both;
+  animation-name: flipOutY;
 }
 </style>
