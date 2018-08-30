@@ -40,6 +40,7 @@ export default new Vuex.Store({
     initData: function (state) {
       // state.userName = window.localStorage.getItem('userName') || ''
       // state.avatarURL = window.localStorage.getItem('avatarURL') || ''
+      state.hasLogin = window.localStorage.getItem('hasLogin') === 'true'
       state.collections = JSON.parse(window.localStorage.getItem('collections')) || []
     },
     emptyData: function (state) {
@@ -51,13 +52,27 @@ export default new Vuex.Store({
   },
   actions: {
     login: function ({ commit, state }, payload) {
-      payload.userName && commit('updateUserName', payload)
-      payload.avatarURL && commit('updateAvatarURL', payload)
-      commit('updateLoginState', { hasLogin: true })
-      setTimeout(() => {
-        window.localStorage.setItem('userName', state.userName)
-        window.localStorage.setItem('avatarURL', state.avatarURL)
-      })
+      if (payload.userName.length) {
+        this.$axios.get(`https://api.github.com/users/${payload.userName}`, {
+          'headers': {
+            'Accept': 'application/vnd.github.v3+json'
+          }
+        }).then(response => {
+          if (response.status === 200) {
+            commit('updateUserName', { userName: response.data.login })
+            commit('updateAvatarURL', { avatarURL: response.data.avatar_url })
+            commit('updateLoginState', { hasLogin: true })
+            commit('updateUserInformations', response.data)
+            setTimeout(() => {
+              window.localStorage.setItem('userName', state.userName)
+              window.localStorage.setItem('avatarURL', state.avatarURL)
+            })
+          }
+        }).catch(reason => {
+          console.log('login fail!')
+          this.$store.commit('updateLoginState', { hasLogin: false })
+        })
+      }
     },
     logout: function ({ commit, state }) {
       commit('emptyData')
