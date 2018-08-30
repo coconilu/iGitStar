@@ -21,12 +21,16 @@ export default new Vuex.Store({
       state.userInformations = { ...payload }
     },
     updateCollections: function (state, payload) {
-      if (payload.type === 'add') {
-        state.collections.unshift(payload.newItem)
-      } else if (payload.type === 'toTop') {
-        state.collections.unshift.apply(state.collections, state.collections.splice(payload.toTopIndex, 1))
-      } else if (payload.type === 'remove') {
-        state.collections.splice(payload.removeIndex, 1)
+      switch (payload.type) {
+        case 'add':
+          state.collections.unshift(payload.newItem)
+          break
+        case 'toTop':
+          state.collections.unshift.apply(state.collections, state.collections.splice(payload.toTopIndex, 1))
+          break
+        case 'remove':
+          state.collections.splice(payload.removeIndex, 1)
+          break
       }
     },
     initData: function (state) {
