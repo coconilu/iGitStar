@@ -57,8 +57,6 @@ export default {
       return this.$store.state.collections
     },
     shouldShowSkeleton: function () {
-      console.log('hi')
-      console.log(this.collectionsFromServer, this.starsFromServer)
       return !(this.collectionsFromServer.length || this.starsFromServer.length)
     }
   },
@@ -71,7 +69,7 @@ export default {
           this.page = 1
           if (this.collectionsFromLocal && this.collectionsFromLocal.length > 0) {
             this.getCollectionsFromServer(this.collectionsFromLocal, result => {
-              this.smoothInsertItem(10, this.collectionsFromServer, result)
+              this.smoothInsertItem(1, this.collectionsFromServer, result)
               this.loadMoreStars(() => {
                 this.onVisible(document.querySelector('section.indication'), () => {
                   this.loadMoreStars()
@@ -190,7 +188,7 @@ export default {
             this.collectionsFromLocal.length && result.forEach(item => {
               if (this.collectionsFromLocal.includes(item.full_name)) item.hasCollected = true
             })
-            this.smoothInsertItem(10, this.starsFromServer, result)
+            this.smoothInsertItem(1, this.starsFromServer, result)
           } else {
             // TODO: to show username unfounded
             this.hasLoadedAllStars = true
