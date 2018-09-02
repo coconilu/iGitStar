@@ -5,16 +5,12 @@
         <Skeleton v-for="item of [1,2]" :key="item"></Skeleton>
       </section>
       <div class="cards-container" v-else>
-        <section class="collection-container">
-          <CollectedCardContainer>
-            <CollectCard v-for="(collect, index) of collectionsFromServer" :key="collect.full_name" :metaData="collect" :index="index" @toTheTop="repositoryToTop" @removeFromCollections="removeFromCollections"></CollectCard>
-          </CollectedCardContainer>
-        </section>
-        <section class="starcard-container">
-          <StarCardContainer>
-            <StarCard v-for="(star, index) of starsFromServer" v-show="!star.hasCollected" :key="star.full_name" :metaData="star" :index="index" @addToCollections="addToCollections"></StarCard>
-          </StarCardContainer>
-        </section>
+        <CollectedCardContainer>
+          <CollectCard v-for="(collect, index) of collectionsFromServer" :key="collect.full_name" :metaData="collect" :index="index" @toTheTop="repositoryToTop" @removeFromCollections="removeFromCollections"></CollectCard>
+        </CollectedCardContainer>
+        <StarCardContainer>
+          <StarCard v-for="(star, index) of starsFromServer" v-show="!star.hasCollected" :key="star.full_name" :metaData="star" :index="index" @addToCollections="addToCollections"></StarCard>
+        </StarCardContainer>
       </div>
     </transition>
     <section class="indication">

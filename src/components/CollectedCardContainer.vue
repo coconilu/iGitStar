@@ -1,5 +1,5 @@
 <template>
-  <transition-group name="card-container" class="card-container" tag="div" enter-active-class="slideInRight" leave-active-class="slideOutDown" move-class="when-move">
+  <transition-group name="collections-container" class="collections-container" tag="div" enter-active-class="slideInRight" leave-active-class="slideOutDown" move-class="when-move">
     <slot></slot>
   </transition-group>
 </template>
@@ -11,7 +11,10 @@ export default {
 </script>
 
 <style>
-.when-move {
-  transition: all 0.8 ease-in-out;
+div.collections-container {
+  position: relative;
+}
+.collections-container-move {
+  transition: transform 1s;
 }
 </style>
