@@ -87,7 +87,7 @@ export default {
 </script>
 
 <style>
-section.star-card {
+.star-card {
   margin: 25px 0;
   padding-left: 35px;
   position: relative;
@@ -95,13 +95,14 @@ section.star-card {
   border: 1px solid #dcdee2;
   border-color: #e8eaec;
   border-radius: 6px;
+  background-color: #fff;
 }
-section.star-card:hover {
+.star-card:hover {
   box-shadow: 0 1px 6px rgba(0, 0, 0, 0.2);
   border-color: #eee;
-  transition: all 0.2s ease-in-out;
+  transition: all 0.3s ease-in-out;
 }
-section.star-card > article.star-card-main > img {
+.star-card > article.star-card-main > img {
   max-width: 40px;
   max-height: 40px;
   position: absolute;
@@ -110,7 +111,7 @@ section.star-card > article.star-card-main > img {
   border-radius: 50%;
   box-shadow: 0 0 1px 2px rgba(0, 0, 0, 0.2);
 }
-section.star-card > article.star-card-main > header.star-card-header {
+.star-card > article.star-card-main > header.star-card-header {
   box-sizing: border-box;
   padding-top: 14px;
   height: 50px;
@@ -120,7 +121,7 @@ section.star-card > article.star-card-main > header.star-card-header {
   justify-content: space-between;
   align-items: stretch;
 }
-section.star-card
+.star-card
   > article.star-card-main
   > header.star-card-header
   > div.star-card-header-title {
@@ -133,7 +134,7 @@ section.star-card
   text-overflow: ellipsis;
   letter-spacing: 0.2px;
 }
-section.star-card
+.star-card
   > article.star-card-main
   > header.star-card-header
   > div.star-card-header-buttons {
@@ -144,7 +145,7 @@ section.star-card
   justify-content: flex-end;
   align-items: stretch;
 }
-section.star-card
+.star-card
   > article.star-card-main
   > header.star-card-header
   > div.star-card-header-buttons
@@ -162,25 +163,25 @@ section.star-card
   text-align: center;
   overflow: hidden;
 }
-section.star-card
+.star-card
   > article.star-card-main
   > header.star-card-header
   > div.star-card-header-buttons
   > button:hover {
   opacity: 0.8;
 }
-section.star-card
+.star-card
   > article.star-card-main
   > header.star-card-header
   > div.star-card-header-buttons
   > button:active {
   opacity: 0.6;
 }
-section.star-card > article.star-card-main > p.star-card-description {
+.star-card > article.star-card-main > p.star-card-description {
   padding-right: 25%;
   line-height: 1.6em;
 }
-section.star-card > article.star-card-main > footer.star-card-footer > * {
+.star-card > article.star-card-main > footer.star-card-footer > * {
   display: inline-block;
 }
 span.star-card-footer-language-icon {
@@ -192,18 +193,18 @@ span.star-card-footer-language-icon {
   vertical-align: baseline;
   opacity: 0.6;
 }
-section.star-card > article.star-card-main > footer.star-card-footer {
+.star-card > article.star-card-main > footer.star-card-footer {
   padding-bottom: 1em;
   white-space: nowrap;
   overflow: hidden;
   font-size: 13px;
 }
-section.star-card > article.star-card-main > footer.star-card-footer > * {
+.star-card > article.star-card-main > footer.star-card-footer > * {
   margin-right: 1em;
   vertical-align: bottom;
 }
 
-section.star-card > article.star-card-main > footer.star-card-footer svg {
+.star-card > article.star-card-main > footer.star-card-footer svg {
   vertical-align: -1px;
   width: 1em;
   height: 1em;
