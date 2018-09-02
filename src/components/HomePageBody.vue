@@ -1,6 +1,6 @@
 <template>
   <article class="home-page-main">
-    <transition name="home-page-switcher">
+    <transition name="home-page-switcher" mode="out-in" enter-active-class="animated fadeInDown">
       <section class="skeleton-container" v-if="shouldShowSkeleton" mode="out-in">
         <Skeleton v-for="item of [1,2]" :key="item"></Skeleton>
       </section>
@@ -9,7 +9,7 @@
           <CollectCard v-for="(collect, index) of collectionsFromServer" :key="collect.full_name" :metaData="collect" :index="index" @toTheTop="repositoryToTop" @removeFromCollections="removeFromCollections"></CollectCard>
         </CollectedCardContainer>
         <StarCardContainer>
-          <StarCard v-for="(star, index) of starsFromServer" v-show="!star.hasCollected" :key="star.full_name" :metaData="star" :index="index" @addToCollections="addToCollections"></StarCard>
+          <StarCard v-for="(star, index) of starsFromServer" v-if="!star.hasCollected" :key="star.full_name" :metaData="star" :index="index" @addToCollections="addToCollections"></StarCard>
         </StarCardContainer>
       </div>
     </transition>
