@@ -95,11 +95,11 @@ section.star-card {
   border: 1px solid #dcdee2;
   border-color: #e8eaec;
   border-radius: 6px;
-  transition: all 0.2s ease-in-out;
 }
 section.star-card:hover {
   box-shadow: 0 1px 6px rgba(0, 0, 0, 0.2);
   border-color: #eee;
+  transition: all 0.2s ease-in-out;
 }
 section.star-card > article.star-card-main > img {
   max-width: 40px;
