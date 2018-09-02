@@ -200,12 +200,10 @@ export default {
     onVisible: function (selector, callback) {
       var shouldRun = true
       window.addEventListener('scroll', function () {
-        if (shouldRun) {
-          shouldRun = false
+        if (shouldRun && selector.getBoundingClientRect().top < window.innerHeight) {
           // TODO when onVisible
-          if (selector.getBoundingClientRect().top < window.innerHeight) {
-            callback && callback()
-          }
+          shouldRun = false
+          callback && callback()
           setTimeout(() => {
             shouldRun = true
           }, 200)
