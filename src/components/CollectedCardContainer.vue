@@ -1,5 +1,5 @@
 <template>
-  <transition-group name="collections-container" class="collections-container" tag="div" enter-active-class="slideInRight" leave-active-class="slideOutDown" move-class="when-move">
+  <transition-group name="collections-container" class="collections-container" tag="div" mode="out-in">
     <slot></slot>
   </transition-group>
 </template>

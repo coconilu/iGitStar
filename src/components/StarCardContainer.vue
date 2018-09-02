@@ -1,5 +1,5 @@
 <template>
-  <transition-group name="stars-container" class="stars-container" tag="div" enter-active-class="slideInUp" leave-active-class="slideOutRight" move-class="when-move">
+  <transition-group name="stars-container" class="stars-container" tag="div" mode="out-in">
     <slot></slot>
   </transition-group>
 </template>
@@ -14,7 +14,7 @@ export default {
 div.stars-container{
   position: relative;
 }
-.card-container-move {
+.stars-container-move {
   transition: transform 1s;
 }
 </style>
