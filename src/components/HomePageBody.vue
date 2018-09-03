@@ -1,7 +1,7 @@
 <template>
   <article class="home-page-main">
     <transition name="home-page-switcher" mode="out-in">
-      <section class="skeleton-container" v-if="shouldShowSkeleton" mode="out-in">
+      <section class="skeleton-container" v-if="shouldShowSkeleton">
         <Skeleton v-for="item of [1, 2, 3]" :key="item"></Skeleton>
       </section>
       <div class="cards-container" v-else>
@@ -11,8 +11,8 @@
         </CardContainer>
       </div>
     </transition>
-    <section class="indication" v-show="hasLoaded">
-      <transition name="indication-switcher" mode="out-in">
+    <section class="indication" v-show="canShowIndication">
+      <transition name="indication-switcher" mode="out-in" leave-active-class="animated fadeOutDown">
         <Skeleton v-if="!hasLoadedAllStars"></Skeleton>
         <span v-else>—— · No More · ——</span>
       </transition>
@@ -36,7 +36,10 @@ export default {
   data: function () {
     return {
       hasLoadedAllStars: false,
-      hasLoaded: false,
+      canShowIndication: false,
+      canShowStars: false,
+      shouldShowSkeleton: true,
+      isLoadingStars: false,
       collectionsFromServer: [],
       starsFromServer: [],
       page: 1,
@@ -49,9 +52,6 @@ export default {
     },
     collectionsFromLocal: function () {
       return this.$store.state.collections
-    },
-    shouldShowSkeleton: function () {
-      return !(this.collectionsFromServer.length || this.starsFromServer.length)
     }
   },
   watch: {
@@ -63,28 +63,45 @@ export default {
           this.page = 1
           if (this.collectionsFromLocal && this.collectionsFromLocal.length > 0) {
             this.getCollectionsFromServer(this.collectionsFromLocal, result => {
-              this.smoothInsertItem(1, this.collectionsFromServer, result)
-              this.loadMoreStars(() => {
-                this.onVisible(document.querySelector('section.indication'), () => {
-                  this.loadMoreStars()
-                })
-              })
-              setTimeout(() => {
-                this.hasLoaded = true
-              }, this.animationOutTime)
+              this.shouldShowSkeleton = false
+              this.smoothInsertItemByTimeout(this.collectionsFromServer, result, () => {
+                this.canShowStars = true
+                this.canShowIndication = true
+              }, 500)
             })
           } else {
-            this.loadMoreStars(() => {
-              this.onVisible(document.querySelector('section.indication'), () => {
-                this.loadMoreStars()
-              })
-            })
+            this.canShowStars = true
           }
         } else {
           // logout
+          this.hasLoadedAllStars = false
+          this.canShowIndication = false
+          this.canShowStars = false
+          this.shouldShowSkeleton = true
+          this.isLoadingStars = false
           this.starsFromServer = []
           this.collectionsFromServer = []
+          this.page = 1
           this.$store.dispatch('logout')
+        }
+      },
+      immediate: true
+    },
+    canShowStars: {
+      handler: function (newValue) {
+        if (newValue) {
+          this.isLoadingStars = true
+          this.loadStars((targetArr, sourceArr) => {
+            this.canShowIndication = false
+            this.shouldShowSkeleton = false
+            this.smoothInsertItemByTimeout(targetArr, sourceArr, () => {
+              this.canShowIndication = true
+              this.isLoadingStars = false
+              this.onVisible(document.querySelector('section.indication'), () => {
+                this.loadStars()
+              })
+            }, 200)
+          })
         }
       },
       immediate: true
@@ -168,18 +185,23 @@ export default {
         })
       }, this.animationOutTime)
     },
-    smoothInsertItem: function (step, targetArr, sourceArr) {
-      var end = 0
-      var insertItem = function () {
-        targetArr.push.apply(targetArr, sourceArr.slice(end, end + step))
-        end += step
-        if (end < sourceArr.length) {
-          window.requestAnimationFrame(insertItem)
-        }
+    smoothInsertItemByTimeout: function (targetArr, sourceArr, onDone, delay) {
+      var index = 0
+      var loop = () => {
+        setTimeout(() => {
+          if (index < sourceArr.length) {
+            targetArr.push(sourceArr[index++])
+            loop()
+          } else {
+            onDone && onDone()
+          }
+        }, 200)
       }
-      window.requestAnimationFrame(insertItem)
+      setTimeout(() => {
+        loop()
+      }, delay || 0)
     },
-    loadMoreStars: function (callback) {
+    loadStars: function (insertHandler) {
       if (!this.hasLoadedAllStars) {
         this.getStarsFromServer(this.userName, this.page++, result => {
           if (result.length >= 0) {
@@ -187,20 +209,22 @@ export default {
             this.collectionsFromLocal.length && result.forEach(item => {
               if (this.collectionsFromLocal.includes(item.full_name)) item.hasCollected = true
             })
-            this.smoothInsertItem(1, this.starsFromServer, result)
+            if (insertHandler) {
+              insertHandler(this.starsFromServer, result)
+            } else {
+              this.smoothInsertItemByTimeout(this.starsFromServer, result)
+            }
           } else {
             // TODO: to show username unfounded
             this.hasLoadedAllStars = true
           }
-          callback && callback()
         })
       }
     },
     onVisible: function (selector, callback) {
       var shouldRun = true
       window.addEventListener('scroll', function () {
-        if (shouldRun && selector.getBoundingClientRect().top < window.innerHeight) {
-          // TODO when onVisible
+        if (!this.isLoadingStars && shouldRun && selector && selector.getBoundingClientRect().top < window.innerHeight) {
           shouldRun = false
           callback && callback()
           setTimeout(() => {
@@ -222,11 +246,12 @@ article.home-page-main {
 }
 .home-page-switcher-enter-active {
   opacity: 1;
-  transition: all 0.5s linear;
+  transition: all 0.1s linear;
 }
 .home-page-switcher-leave-active {
   opacity: 0;
-  transition: all 0.5s linear;
+  transform: translateY(-10px);
+  transition: all 0.2s linear;
 }
 section.skeleton-container {
   position: relative;
