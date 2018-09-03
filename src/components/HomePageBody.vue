@@ -1,16 +1,14 @@
 <template>
   <article class="home-page-main">
-    <transition name="home-page-switcher" mode="out-in" enter-active-class="animated fadeInDown">
+    <transition name="home-page-switcher" mode="out-in">
       <section class="skeleton-container" v-if="shouldShowSkeleton" mode="out-in">
         <Skeleton v-for="item of [1,2]" :key="item"></Skeleton>
       </section>
       <div class="cards-container" v-else>
-        <CollectedCardContainer>
+        <CardContainer>
           <CollectCard v-for="(collect, index) of collectionsFromServer" :key="collect.full_name" :metaData="collect" :index="index" @toTheTop="repositoryToTop" @removeFromCollections="removeFromCollections"></CollectCard>
-        </CollectedCardContainer>
-        <StarCardContainer>
           <StarCard v-for="(star, index) of starsFromServer" v-if="!star.hasCollected" :key="star.full_name" :metaData="star" :index="index" @addToCollections="addToCollections"></StarCard>
-        </StarCardContainer>
+        </CardContainer>
       </div>
     </transition>
     <section class="indication">
@@ -26,16 +24,14 @@
 import Skeleton from '@/components/Skeleton'
 import StarCard from '@/components/StarCard'
 import CollectCard from '@/components/CollectCard'
-import StarCardContainer from '@/components/StarCardContainer'
-import CollectedCardContainer from '@/components/CollectedCardContainer'
+import CardContainer from '@/components/CardContainer'
 export default {
   name: 'HomePageMain',
   components: {
     Skeleton,
     StarCard,
     CollectCard,
-    StarCardContainer,
-    CollectedCardContainer
+    CardContainer
   },
   data: function () {
     return {

@@ -96,11 +96,11 @@ export default {
   border-color: #e8eaec;
   border-radius: 6px;
   background-color: #fff;
+  transition: all 0.3s ease-in-out;
 }
 .star-card:hover {
   box-shadow: 0 1px 6px rgba(0, 0, 0, 0.2);
   border-color: #eee;
-  transition: all 0.3s ease-in-out;
 }
 .star-card > article.star-card-main > img {
   max-width: 40px;
