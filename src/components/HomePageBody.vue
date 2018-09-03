@@ -38,7 +38,8 @@ export default {
       hasLoadedAllStars: false,
       collectionsFromServer: [],
       starsFromServer: [],
-      page: 1
+      page: 1,
+      animationOutTime: 1000
     }
   },
   computed: {
@@ -132,7 +133,9 @@ export default {
     addToCollections: function (index) {
       if (!this.starsFromServer[index].hasCollected) {
         this.$set(this.starsFromServer[index], 'hasCollected', true)
-        this.collectionsFromServer.unshift(this.starsFromServer[index])
+        setTimeout(() => {
+          this.collectionsFromServer.unshift(this.starsFromServer[index])
+        }, this.animationOutTime)
         this.$store.dispatch('persistCollections', {
           type: 'add',
           newItem: this.starsFromServer[index].full_name
@@ -159,7 +162,7 @@ export default {
         this.starsFromServer.length && this.starsFromServer.forEach(item => {
           if (item.full_name === targetFullName) this.$set(item, 'hasCollected', false)
         })
-      })
+      }, this.animationOutTime)
     },
     smoothInsertItem: function (step, targetArr, sourceArr) {
       var end = 0
