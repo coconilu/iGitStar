@@ -1,5 +1,5 @@
 <template>
-  <transition-group name="cards-container" class="cards-container" tag="div">
+  <transition-group name="cards-container" class="cards-container" tag="div" leave-active-class="animated flipOutX">
     <slot></slot>
   </transition-group>
 </template>
