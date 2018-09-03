@@ -11,6 +11,9 @@ export default {
 </script>
 
 <style>
+html::-webkit-scrollbar{
+  display: none;
+}
 html, body, #app {
   height: 100%;
   scroll-behavior: smooth;
