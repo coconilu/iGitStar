@@ -2,7 +2,7 @@
   <article class="home-page-main">
     <transition name="home-page-switcher" mode="out-in">
       <section class="skeleton-container" v-if="shouldShowSkeleton" mode="out-in">
-        <Skeleton v-for="item of [1,2]" :key="item"></Skeleton>
+        <Skeleton v-for="item of [1, 2, 3]" :key="item"></Skeleton>
       </section>
       <div class="cards-container" v-else>
         <CardContainer>
@@ -11,7 +11,7 @@
         </CardContainer>
       </div>
     </transition>
-    <section class="indication">
+    <section class="indication" v-show="hasLoaded">
       <transition name="indication-switcher" mode="out-in">
         <Skeleton v-if="!hasLoadedAllStars"></Skeleton>
         <span v-else>—— · No More · ——</span>
@@ -36,6 +36,7 @@ export default {
   data: function () {
     return {
       hasLoadedAllStars: false,
+      hasLoaded: false,
       collectionsFromServer: [],
       starsFromServer: [],
       page: 1,
@@ -68,6 +69,9 @@ export default {
                   this.loadMoreStars()
                 })
               })
+              setTimeout(() => {
+                this.hasLoaded = true
+              }, this.animationOutTime)
             })
           } else {
             this.loadMoreStars(() => {
