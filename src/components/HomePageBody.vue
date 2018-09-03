@@ -90,18 +90,20 @@ export default {
     canShowStars: {
       handler: function (newValue) {
         if (newValue) {
-          this.isLoadingStars = true
-          this.loadStars((targetArr, sourceArr) => {
-            this.canShowIndication = false
-            this.shouldShowSkeleton = false
-            this.smoothInsertItemByTimeout(targetArr, sourceArr, () => {
-              this.canShowIndication = true
-              this.isLoadingStars = false
-              this.onVisible(document.querySelector('section.indication'), () => {
-                this.loadStars()
-              })
-            }, 200)
-          })
+          var tempFun = (shoulRegisterOnscroll) => {
+            this.loadStars((targetArr, sourceArr) => {
+              this.canShowIndication = false
+              this.shouldShowSkeleton = false
+              this.smoothInsertItemByTimeout(targetArr, sourceArr, () => {
+                this.canShowIndication = true
+                this.isLoadingStars = false
+                shoulRegisterOnscroll && this.onVisible(document.querySelector('section.indication'), () => {
+                  tempFun(false)
+                })
+              }, 200)
+            })
+          }
+          tempFun(true)
         }
       },
       immediate: true
@@ -203,6 +205,7 @@ export default {
     },
     loadStars: function (insertHandler) {
       if (!this.hasLoadedAllStars) {
+        this.isLoadingStars = true
         this.getStarsFromServer(this.userName, this.page++, result => {
           if (result.length >= 0) {
             if (result.length < 30) this.hasLoadedAllStars = true
@@ -223,7 +226,7 @@ export default {
     },
     onVisible: function (selector, callback) {
       var shouldRun = true
-      window.addEventListener('scroll', function () {
+      window.addEventListener('scroll', () => {
         if (!this.isLoadingStars && shouldRun && selector && selector.getBoundingClientRect().top < window.innerHeight) {
           shouldRun = false
           callback && callback()
