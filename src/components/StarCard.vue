@@ -176,6 +176,7 @@ export default {
   > div.star-card-header-buttons
   > button:active {
   opacity: 0.6;
+  outline: none;
 }
 .star-card > article.star-card-main > p.star-card-description {
   padding-right: 25%;
