@@ -39,8 +39,8 @@ var store = new Vuex.Store({
       }
     },
     initData: function (state) {
-      // state.userName = window.localStorage.getItem('userName') || ''
-      // state.avatarURL = window.localStorage.getItem('avatarURL') || ''
+      state.userName = window.localStorage.getItem('userName') || ''
+      state.avatarURL = window.localStorage.getItem('avatarURL') || ''
       state.hasLogin = window.localStorage.getItem('hasLogin') === 'true'
       state.collections = JSON.parse(window.localStorage.getItem('collections')) || []
     },
