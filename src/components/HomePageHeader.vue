@@ -3,7 +3,7 @@
     <article>
       <section></section>
       <section>
-        <transition name="login-widget" enter-active-class="bounceInDown" leave-active-class="bounceOutUp" mode="out-in">
+        <transition name="login-widget" enter-active-class="animated fadeInDown" leave-active-class="animated fadeOutUp" mode="out-in">
           <Avatar v-if="hasLogined" :size="42"></Avatar>
           <LoginForm v-else></LoginForm>
         </transition>
@@ -66,9 +66,5 @@ header.home-page-header > article > section:last-of-type {
   justify-content: flex-end;
   align-items: center;
   height: 100%;
-}
-header.home-page-header > article > section:last-of-type > * {
-  animation-duration: 1s;
-  animation-fill-mode: both;
 }
 </style>
