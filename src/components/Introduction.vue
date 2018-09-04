@@ -34,7 +34,7 @@ export default {
   box-shadow: 0 1px 6px rgba(0, 0, 0, 0.2);
   border: 1px solid #dcdee2;
   border-color: #e8eaec;
-  border-radius: 6px;
+  border-radius: 26px;
   background-color: #fff;
   transform: translateY(-10px);
 }
