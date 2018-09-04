@@ -1,23 +1,26 @@
 <template>
-  <article class="home-page-main">
-    <transition name="home-page-switcher" mode="out-in">
-      <section class="skeleton-container" v-if="shouldShowSkeleton">
-        <Skeleton v-for="item of [1, 2, 3]" :key="item"></Skeleton>
-      </section>
-      <div class="cards-container" v-else>
-        <CardContainer>
-          <CollectCard v-for="(collect, index) of collectionsFromServer" :key="collect.full_name" :metaData="collect" :index="index" @toTheTop="repositoryToTop" @removeFromCollections="removeFromCollections"></CollectCard>
-          <StarCard v-for="(star, index) of starsFromServer" v-if="!star.hasCollected" :key="star.full_name" :metaData="star" :index="index" @addToCollections="addToCollections"></StarCard>
-        </CardContainer>
-      </div>
-    </transition>
-    <section class="indication" v-show="canShowIndication">
-      <transition name="indication-switcher" mode="out-in" leave-active-class="animated fadeOutDown">
-        <Skeleton v-if="!hasLoadedAllStars"></Skeleton>
-        <span v-else>—— · No More · ——</span>
+  <transition>
+    <article class="home-page-main" v-if="userName.length">
+      <transition name="home-page-switcher" mode="out-in">
+        <section class="skeleton-container" v-if="shouldShowSkeleton">
+          <Skeleton v-for="item of [1, 2, 3]" :key="item"></Skeleton>
+        </section>
+        <div class="cards-container" v-else>
+          <CardContainer>
+            <CollectCard v-for="(collect, index) of collectionsFromServer" :key="collect.full_name" :metaData="collect" :index="index" @toTheTop="repositoryToTop" @removeFromCollections="removeFromCollections"></CollectCard>
+            <StarCard v-for="(star, index) of starsFromServer" v-if="!star.hasCollected" :key="star.full_name" :metaData="star" :index="index" @addToCollections="addToCollections"></StarCard>
+          </CardContainer>
+        </div>
       </transition>
-    </section>
-  </article>
+      <section class="indication" v-show="canShowIndication">
+        <transition name="indication-switcher" mode="out-in" leave-active-class="animated fadeOutDown">
+          <Skeleton v-if="!hasLoadedAllStars"></Skeleton>
+          <span v-else>—— · No More · ——</span>
+        </transition>
+      </section>
+    </article>
+    <Introduction v-else></Introduction>
+  </transition>
 </template>
 
 <script>
@@ -25,13 +28,15 @@ import Skeleton from '@/components/Skeleton'
 import StarCard from '@/components/StarCard'
 import CollectCard from '@/components/CollectCard'
 import CardContainer from '@/components/CardContainer'
+import Introduction from '@/components/Introduction'
 export default {
   name: 'HomePageMain',
   components: {
     Skeleton,
     StarCard,
     CollectCard,
-    CardContainer
+    CardContainer,
+    Introduction
   },
   data: function () {
     return {
