@@ -7,8 +7,8 @@ Vue.use(Vuex)
 var store = new Vuex.Store({
   state: {
     hasLogin: false,
-    userName: 'coconilu',
-    avatarURL: 'https://avatars3.githubusercontent.com/u/8131019?v=4',
+    userName: '',
+    avatarURL: '',
     collections: [],
     userInformations: {}
   },
