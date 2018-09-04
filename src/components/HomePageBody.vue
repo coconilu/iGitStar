@@ -1,5 +1,5 @@
 <template>
-  <transition>
+  <transition mode="out-in">
     <article class="home-page-main" v-if="userName.length">
       <transition name="home-page-switcher" mode="out-in">
         <section class="skeleton-container" v-if="shouldShowSkeleton">
