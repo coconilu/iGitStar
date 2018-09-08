@@ -230,15 +230,14 @@ export default {
       }
     },
     onVisible: function (selector, callback) {
-      var shouldRun = true
+      let timeout
       window.addEventListener('scroll', () => {
-        if (!this.isLoadingStars && shouldRun && selector && selector.getBoundingClientRect().top < window.innerHeight) {
-          shouldRun = false
-          callback && callback()
-          setTimeout(() => {
-            shouldRun = true
-          }, 200)
-        }
+        clearTimeout(timeout)
+        timeout = setTimeout(() => {
+          if (!this.isLoadingStars && selector && selector.getBoundingClientRect().top < window.innerHeight) {
+            callback && callback()
+          }
+        }, 200)
       })
     }
   }
