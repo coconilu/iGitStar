@@ -47,7 +47,8 @@ header.home-page-header > article {
   flex-wrap: nowrap;
   justify-content: space-between;
   align-items: stretch;
-  width: 1200px;
+  max-width: 1200px;
+  padding: 0 10px;
   height: 100%;
   margin: 0 auto;
 }
