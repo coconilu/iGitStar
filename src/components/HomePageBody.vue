@@ -288,4 +288,11 @@ section.indication > span {
   animation-fill-mode: both;
   animation-name: flipOutY;
 }
+
+@media screen and (max-width: 900px) {
+  article.home-page-main {
+    width: 100%;
+    padding: 0 10px;
+  }
+}
 </style>

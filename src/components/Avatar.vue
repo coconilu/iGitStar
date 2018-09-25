@@ -47,6 +47,7 @@ span.avatar-container > * {
   transition: all 0.4s ease-in-out;
 }
 span.avatar-container > img {
+  object-fit: cover;
   opacity: 1;
 }
 span.avatar-container > img:hover {
