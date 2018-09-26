@@ -14,7 +14,4 @@ export default {
 div.cards-container{
   position: relative;
 }
-div.cards-container > .cards-container-move {
-  transition: transform .5s;
-}
 </style>

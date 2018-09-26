@@ -47,7 +47,7 @@ header.home-page-header > article {
   flex-wrap: nowrap;
   justify-content: space-between;
   align-items: stretch;
-  max-width: 1200px;
+  width: 1200px;
   padding: 0 10px;
   height: 100%;
   margin: 0 auto;
@@ -67,5 +67,15 @@ header.home-page-header > article > section:last-of-type {
   justify-content: flex-end;
   align-items: center;
   height: 100%;
+}
+
+@media screen and (max-width: 1200px) {
+  header.home-page-header {
+    width: 100vw;
+  }
+  header.home-page-header > article {
+    box-sizing: border-box;
+    width: 100%;
+  }
 }
 </style>
