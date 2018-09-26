@@ -13,7 +13,6 @@
         <div class="skeleton-footer-one"></div>
         <div class="skeleton-footer-two"></div>
         <div class="skeleton-footer-three"></div>
-        <div class="skeleton-footer-four"></div>
       </div>
   </div>
 </template>
@@ -38,7 +37,7 @@ div.skeleton {
   height: 134px;
   box-shadow: 0 1px 6px rgba(0, 0, 0, 0.2);
   border-color: #eee;
-  margin: 25px 0;
+  margin: 25px 8px;
   padding-left: 35px;
   position: relative;
 }
