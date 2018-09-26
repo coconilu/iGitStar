@@ -104,7 +104,7 @@ export default {
     canShowStars: {
       handler: function (newValue) {
         if (newValue) {
-          let tempFun = (shoulRegisterOnscroll) => {
+          let toLoadStars = (shoulRegisterOnscroll) => {
             this.loadStars((targetArr, sourceArr) => {
               this.shouldShowSkeleton = false
               this.smoothInsertItemByTimeout(targetArr, sourceArr, () => {
@@ -113,16 +113,16 @@ export default {
                 this.canShowIndication = true
                 this.isLoadingStars = false
                 shoulRegisterOnscroll && this.onVisible(document.querySelector('section.indication'), () => {
-                  tempFun(false)
+                  toLoadStars(false)
                 })
               }, 0)
             })
           }
-          if (document.querySelector('section.indication').getBoundingClientRect().top < window.innerHeight) {
-            tempFun(true)
+          if (!document.querySelector('section.indication') || document.querySelector('section.indication').getBoundingClientRect().top < window.innerHeight) {
+            toLoadStars(true)
           } else {
             this.onVisible(document.querySelector('section.indication'), () => {
-              tempFun(false)
+              toLoadStars(false)
             })
           }
         }
