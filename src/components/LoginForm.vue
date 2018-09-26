@@ -1,6 +1,6 @@
 <template>
   <div class="login-form">
-    <input type="text" :class="{'input--background-animation': logining}" placeholder="Your Github Login Name" v-model="userName" @keyup.enter="login"/><button type="submit" @click="login">Login</button>
+    <input type="text" :class="{'input--background-animation': logining}" placeholder="Your Github username" v-model="userName" @keyup.enter="login"/><button type="submit" @click="login">Login</button>
   </div>
 </template>
 
@@ -36,6 +36,7 @@ export default {
 }
 .login-form > input {
   padding: 0 10px;
+  width: 157px;
   border-radius: 10px 0 0 10px;
 }
 .login-form > input:focus {
