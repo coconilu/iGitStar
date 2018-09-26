@@ -66,14 +66,23 @@ export default {
           // login
           this.hasLoadedAllStars = false
           this.page = 1
-          if (this.collectionsFromLocal && this.collectionsFromLocal.length > 0) {
-            this.getCollectionsFromServer(this.collectionsFromLocal, result => {
-              this.shouldShowSkeleton = false
-              this.smoothInsertItemByTimeout(this.collectionsFromServer, result, () => {
-                this.canShowStars = true
-                this.canShowIndication = true
-              }, 500)
-            })
+          let collectionsTatol = this.collectionsFromLocal.length
+          if (this.collectionsFromLocal && collectionsTatol > 0) {
+            // 设置一次性加载上限为 7
+            let mark = 0
+            let partOfCollection
+            let firstTimeLoad = true
+            let getCollectionsFromServerByStep = () => {
+              partOfCollection = this.collectionsFromLocal.slice(mark, mark += 7)
+              this.getCollectionsFromServer(partOfCollection, result => {
+                this.shouldShowSkeleton = false
+                this.smoothInsertItemByTimeout(this.collectionsFromServer, result, undefined, () => {
+                  mark >= collectionsTatol ? (this.canShowStars = true) : getCollectionsFromServerByStep()
+                  this.canShowIndication = true
+                }, firstTimeLoad ? (firstTimeLoad = false, 500) : 0)
+              })
+            }
+            getCollectionsFromServerByStep()
           } else {
             this.canShowStars = true
           }
@@ -95,20 +104,27 @@ export default {
     canShowStars: {
       handler: function (newValue) {
         if (newValue) {
-          var tempFun = (shoulRegisterOnscroll) => {
+          let tempFun = (shoulRegisterOnscroll) => {
             this.loadStars((targetArr, sourceArr) => {
-              this.canShowIndication = false
               this.shouldShowSkeleton = false
               this.smoothInsertItemByTimeout(targetArr, sourceArr, () => {
+                this.canShowIndication = false
+              }, () => {
                 this.canShowIndication = true
                 this.isLoadingStars = false
                 shoulRegisterOnscroll && this.onVisible(document.querySelector('section.indication'), () => {
                   tempFun(false)
                 })
-              }, 200)
+              }, 0)
             })
           }
-          tempFun(true)
+          if (document.querySelector('section.indication').getBoundingClientRect().top < window.innerHeight) {
+            tempFun(true)
+          } else {
+            this.onVisible(document.querySelector('section.indication'), () => {
+              tempFun(false)
+            })
+          }
         }
       },
       immediate: true
@@ -192,8 +208,9 @@ export default {
         })
       }, this.animationOutTime)
     },
-    smoothInsertItemByTimeout: function (targetArr, sourceArr, onDone, delay) {
+    smoothInsertItemByTimeout: function (targetArr, sourceArr, onStart, onDone, delay) {
       var index = 0
+      onStart && onStart()
       var loop = () => {
         setTimeout(() => {
           if (index < sourceArr.length) {
@@ -288,7 +305,6 @@ section.indication > span {
   animation-fill-mode: both;
   animation-name: flipOutY;
 }
-
 @media screen and (max-width: 900px) {
   article.home-page-main {
     width: 100%;
