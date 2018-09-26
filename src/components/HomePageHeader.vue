@@ -31,7 +31,7 @@ export default {
 header.home-page-header {
   display: block;
   box-sizing: border-box;
-  width: 100%;
+  width: 100vw;
   position: fixed;
   top: 0;
   left: 0;
@@ -70,9 +70,6 @@ header.home-page-header > article > section:last-of-type {
 }
 
 @media screen and (max-width: 1200px) {
-  header.home-page-header {
-    width: 100vw;
-  }
   header.home-page-header > article {
     box-sizing: border-box;
     width: 100%;
