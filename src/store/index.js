@@ -6,6 +6,7 @@ Vue.use(Vuex)
 
 var store = new Vuex.Store({
   state: {
+    noticeErrorUserName: false,
     hasLogin: false,
     userName: '',
     avatarURL: '',
@@ -13,6 +14,9 @@ var store = new Vuex.Store({
     userInformations: {}
   },
   mutations: {
+    updateNoticeErrorUserName: function (state, payload) {
+      state.noticeErrorUserName = payload.noticeErrorUserName
+    },
     updateLoginState: function (state, payload) {
       state.hasLogin = payload.hasLogin
     },
@@ -71,8 +75,10 @@ var store = new Vuex.Store({
             })
           }
         }).catch(reason => {
+          // TODO: to show username unfounded
           console.log('login fail!')
-          this.$store.commit('updateLoginState', { hasLogin: false })
+          state.noticeErrorUserName = true
+          state.hasLogin = false
         })
       }
     },

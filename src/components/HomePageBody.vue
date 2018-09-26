@@ -240,7 +240,6 @@ export default {
               this.smoothInsertItemByTimeout(this.starsFromServer, result)
             }
           } else {
-            // TODO: to show username unfounded
             this.hasLoadedAllStars = true
           }
         })
