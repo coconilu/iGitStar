@@ -2,10 +2,10 @@
   <article class="introduction">
     <div class="introduction-content-wrapper">
       <p class="introduction__presentation">
-        <span class="introduction__presentation__header">iGitStar</span> 是管理 GitHub stars 的辅助工具，对于经常需要翻阅 stars 或者借助 stars 学习的用户非常适用。 它可以帮你置顶你喜欢的 star 项目，而不会影响你的 GitHub 的数据。换句话说，它是独立于 GitHub 的。
+        <span class="introduction__presentation__header">iGitStar</span> 是管理 GitHub stars 的辅助工具，它是独立于 GitHub 的，而不会影响你的 GitHub 的数据。对于经常需要翻阅 stars 或者借助 stars 学习的用户非常适用，它可以帮你置顶你喜欢的 star 项目。
       </p>
       <p class="introduction__instruction">
-        马上加入吧，只需要在右上角输入你的 GitHub Login Name。 对于我来说，我会输入我的 GitHub 的用户名：coconilu。
+        马上加入吧，只需要在右上角输入你的 GitHub Login Name（请注意，不是登录邮箱哦）。
       </p>
       <p class="introduction__footer">Yours</p>
     </div>
@@ -67,5 +67,10 @@ export default {
 }
 .introduction-content-wrapper:hover > .introduction__footer{
   transform: translateX(-10px);
+}
+@media screen and (max-width: 600px) {
+  .introduction-content-wrapper {
+    width: 90%;
+  }
 }
 </style>
