@@ -15,7 +15,7 @@
       </header>
       <p class="star-card-description">{{description}}</p>
       <footer class="star-card-footer">
-        <div class="star-card-footer-language"><span class="star-card-footer-language-icon"></span> {{language}}</div>
+        <div class="star-card-footer-language" v-if="language"><span class="star-card-footer-language-icon"></span> {{language}}</div>
         <div class="star-card-footer-issue" v-if="issue_numeber">
           <svg viewBox="0 0 14 16" version="1.1" width="14" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M7 2.3c3.14 0 5.7 2.56 5.7 5.7s-2.56 5.7-5.7 5.7A5.71 5.71 0 0 1 1.3 8c0-3.14 2.56-5.7 5.7-5.7zM7 1C3.14 1 0 4.14 0 8s3.14 7 7 7 7-3.14 7-7-3.14-7-7-7zm1 3H6v5h2V4zm0 6H6v2h2v-2z"></path></svg>{{issue_numeber}}
         </div>
@@ -153,12 +153,31 @@ export default {
 .star-card-header__title {
   flex: 1 0 auto;
   font-size: 27px;
+  font-weight: 600;
   line-height: 35px;
   max-width: 70%;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
   letter-spacing: 0.2px;
+}
+.star-card-header__title > a {
+  text-decoration: none;
+  position: relative;
+  color:  #3f485b;
+}
+.star-card-header__title > a::before {
+  content: "";
+  height: 2px;
+  width: 0%;
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  background-color: #3f485b;
+  transition: width 1s;
+}
+.star-card:hover .star-card-header__title > a::before {
+  width: 100%;
 }
 .star-card-header__buttons {
   flex: 0 0 auto;
@@ -195,6 +214,8 @@ export default {
 }
 .star-card-footer > * {
   display: inline-block;
+  margin-right: 1em;
+  vertical-align: bottom;
 }
 .star-card-footer-language-icon {
   display: inline-block;
@@ -211,10 +232,6 @@ export default {
   overflow: hidden;
   font-size: 13px;
 }
-.star-card-footer > * {
-  margin-right: 1em;
-  vertical-align: bottom;
-}
 .star-card-footer svg {
   vertical-align: -1px;
   width: 1em;
@@ -226,7 +243,7 @@ export default {
 @media screen and (max-width: 900px) {
   .star-card {
     margin: 10px 0;
-    padding-left: 0;
+    padding: 0 10px;
   }
 
   .star-card-header {
@@ -236,16 +253,16 @@ export default {
 
   .star-card__avatar {
     position: absolute;
-    left: 5px;
+    left: unset;
     top: unset;
   }
 
   .star-card-header__title {
-    display: inline-block;
+    display: block;
     position: relative;
     margin-top: 42px;
-    padding: 0 10px;
-    max-width: 90%;
+    max-width: 100%;
+    font-size: 22px;
     line-height: 1.5em;
     max-height: 3em;
     white-space: normal;
@@ -254,17 +271,23 @@ export default {
   }
 
   .star-card-header__buttons {
-    display: inline-block;
     height: 36px;
     position: absolute;
-    right: 5px;
+    right: 0px;
   }
   .star-card-header__buttons > button {
     line-height: unset;
     padding: unset;
   }
+  .star-card-header__buttons > button:first-of-type {
+    margin-right: unset;
+  }
   .star-card-description {
     padding: 3px 10px;
+  }
+  .star-card-footer > div:last-of-type {
+    display: block;
+    margin-top: 3px;
   }
 }
 </style>

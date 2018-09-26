@@ -246,7 +246,7 @@ export default {
 
 <style>
 article.home-page-main {
-  max-width: 900px;
+  width: 900px;
   padding: 0 20px;
   box-sizing: border-box;
   position: relative;
