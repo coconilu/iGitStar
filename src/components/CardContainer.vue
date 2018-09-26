@@ -1,5 +1,5 @@
 <template>
-  <transition-group name="cards-container" class="cards-container" tag="div" leave-active-class="animated flipOutX" enter-active-class="animated flipInX">
+  <transition-group name="cards-container" class="cards-container" tag="div" leave-active-class="animated flipOutX when-cards-active" enter-active-class="animated flipInX when-cards-active">
     <slot></slot>
   </transition-group>
 </template>
@@ -13,5 +13,8 @@ export default {
 <style>
 div.cards-container{
   position: relative;
+}
+.when-cards-active {
+  position: absolute;
 }
 </style>
