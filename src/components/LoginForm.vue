@@ -60,7 +60,7 @@ export default {
 }
 .login-form > input {
   padding: 0 10px;
-  width: 157px;
+  width: 10rem;
   border-radius: 10px 0 0 10px;
 }
 .login-form > input:focus {
