@@ -4,7 +4,7 @@
       <section></section>
       <section>
         <transition name="login-widget" enter-active-class="animated fadeInDown" leave-active-class="animated fadeOutUp" mode="out-in">
-          <Avatar v-if="hasLogined" :size="42"></Avatar>
+          <Avatar v-if="shouldShowAvatar" :size="42"></Avatar>
           <LoginForm v-else></LoginForm>
         </transition>
       </section>
@@ -19,9 +19,28 @@ import LoginForm from '@/components/LoginForm'
 export default {
   name: 'HomePageHeader',
   components: { Avatar, LoginForm },
+  data: function () {
+    return {
+      shouldShowAvatar: false
+    }
+  },
   computed: {
     hasLogined: function () {
       return !!this.$store.state.userName.length
+    }
+  },
+  watch: {
+    hasLogined: {
+      immediate: true,
+      handler: function (newValue) {
+        if (newValue) {
+          setTimeout(() => {
+            this.shouldShowAvatar = true
+          }, 300)
+        } else {
+          this.shouldShowAvatar = false
+        }
+      }
     }
   }
 }
