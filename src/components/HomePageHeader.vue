@@ -21,7 +21,8 @@ export default {
   components: { Avatar, LoginForm },
   data: function () {
     return {
-      shouldShowAvatar: false
+      shouldShowAvatar: false,
+      firstTime: true
     }
   },
   computed: {
@@ -34,9 +35,14 @@ export default {
       immediate: true,
       handler: function (newValue) {
         if (newValue) {
-          setTimeout(() => {
+          if (this.firstTime) {
             this.shouldShowAvatar = true
-          }, 300)
+            this.firstTime = false
+          } else {
+            setTimeout(() => {
+              this.shouldShowAvatar = true
+            }, 300)
+          }
         } else {
           this.shouldShowAvatar = false
         }
