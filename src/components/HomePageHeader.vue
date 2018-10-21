@@ -1,7 +1,7 @@
 <template>
   <header class="home-page-header">
     <article>
-      <section></section>
+      <section><span class="home-page-header-logo"><span>i</span><span>Git</span><span>Star</span></span></section>
       <section>
         <transition name="login-widget" enter-active-class="animated fadeInDown" leave-active-class="animated fadeOutUp" mode="out-in">
           <Avatar v-if="shouldShowAvatar" :size="42"></Avatar>
@@ -84,6 +84,31 @@ header.home-page-header > article > section:first-of-type {
   justify-content: flex-start;
   align-items: center;
   height: 100%;
+}
+.home-page-header-logo {
+  margin-left: 0.2em;
+}
+.home-page-header-logo:hover > span:nth-of-type(n + 2) {
+  margin-left: 0.2em;
+  /* transition: all .3s linear; */
+}
+.home-page-header-logo > span:nth-of-type(1) {
+  font-weight: 900;
+  font-size: 2.2em;
+  color: #4d84b2;
+  transition: all 0.3s linear;
+}
+.home-page-header-logo > span:nth-of-type(2) {
+  font-weight: 600;
+  font-size: 1.5em;
+  color: #daac6c;
+  transition: all 0.3s linear;
+}
+.home-page-header-logo > span:nth-of-type(3) {
+  font-weight: 600;
+  font-size: 1.5em;
+  color: #bc3f4e;
+  transition: all 0.3s linear;
 }
 header.home-page-header > article > section:last-of-type {
   display: flex;
