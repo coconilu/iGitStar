@@ -1,7 +1,7 @@
 <template>
   <header class="home-page-header">
     <article>
-      <section><span class="home-page-header-logo"><span>i</span><span>Git</span><span>Star</span></span></section>
+      <section><a class="home-page-header-logo" href="https://github.com/coconilu/iGitStar" target="_blank"><span>i</span><span>Git</span><span>Star</span></a></section>
       <section>
         <transition name="login-widget" enter-active-class="animated fadeInDown" leave-active-class="animated fadeOutUp" mode="out-in">
           <Avatar v-if="shouldShowAvatar" :size="42"></Avatar>
@@ -87,6 +87,7 @@ header.home-page-header > article > section:first-of-type {
 }
 .home-page-header-logo {
   margin-left: 0.2em;
+  text-decoration: none;
 }
 .home-page-header-logo:hover > span:nth-of-type(n + 2) {
   margin-left: 0.2em;
