@@ -44,19 +44,21 @@ span.avatar-container > * {
   position: absolute;
   top: 0;
   left: 0;
-  transition: all 0.4s ease-in-out;
+  transition: all 0.5s ease-in-out;
 }
 span.avatar-container > img {
   object-fit: cover;
+  z-index: 100;
   opacity: 1;
 }
-span.avatar-container > img:hover {
+span.avatar-container:hover > img {
   opacity: 0;
 }
 span.avatar-container > svg {
-  opacity: 1;
+  z-index: 50;
+  opacity: 0;
 }
-span.avatar-container > svg:hover {
+span.avatar-container:hover > svg {
   opacity: 1;
 }
 </style>
